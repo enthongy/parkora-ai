@@ -1,6 +1,6 @@
 # Parkora.ai - AI Traffic & Parking Advisor 🚗🧠
 
-## Live Demo
+## Live Demo for Prototype
 🔗 **[https://enthongy.github.io/parkora-ai/](https://enthongy.github.io/parkora-ai/)**
 
 ## 📋 Project Overview
