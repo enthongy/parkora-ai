@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parkora.ai - AI Traffic & Parking Advisor</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-car"></i>
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Parkora.ai</h1>
+                    <span class="tagline">AI Traffic & Parking Advisor</span>
+                </div>
+            </div>
+            <div class="header-controls">
+                <div class="scenario-selector">
+                    <select id="scenario-select" class="scenario-dropdown">
+                        <option value="demo">Demo Mode</option>
+                        <option value="optimal">Optimal (Low Traffic + Available)</option>
+                        <option value="high-traffic">High Traffic + No Parking</option>
+                        <option value="reroute">Mid-route Reroute</option>
+                        <option value="severe-delay">Severe Delay</option>
+                    </select>
+                </div>
+                <div class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                    <span>Dark Mode</span>
+                </div>
+                <div class="team-info">
+                    <div class="team-badge">
+                        <i class="fas fa-users"></i>
+                        <span>TriSpark Tech</span>
+                    </div>
+                    <p class="course-info">SECJ3553 AI | Section 07</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <!-- AI Status -->
+                <div class="dashboard-card">
+                    <h2><i class="fas fa-brain"></i> AI Agent Status</h2>
+                    <div id="agent-status" class="status-active">
+                        <div class="status-indicator"></div>
+                        <div class="status-text">
+                            <span class="status-title">Ready</span>
+                            <span class="status-desc">Intelligent Parking Assistant</span>
+                        </div>
+                        <button id="explain-ai" class="btn-icon" title="Explain AI Decision">
+                            <i class="fas fa-question-circle"></i>
+                        </button>
+                    </div>
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-label">
+                                <i class="fas fa-map-pin"></i>
+                                <span>Current State:</span>
+                            </div>
+                            <span id="current-state" class="metric-value">APP_IDLE</span>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Performance:</span>
+                            </div>
+                            <span id="performance-score" class="metric-value">85%</span>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">
+                                <i class="fas fa-stopwatch"></i>
+                                <span>Time Saved:</span>
+                            </div>
+                            <span id="time-saved" class="metric-value">0 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PEAS Model -->
+                <div class="peas-card">
+                    <h2><i class="fas fa-cogs"></i> PEAS Model</h2>
+                    <div class="peas-grid">
+                        <div class="peas-item" data-tooltip="Criteria for measuring AI agent success">
+                            <div class="peas-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3>Performance</h3>
+                            <ul>
+                                <li>Reduce search time</li>
+                                <li>Avoid traffic</li>
+                                <li>Save fuel</li>
+                                <li>Maximize success</li>
+                            </ul>
+                        </div>
+                        <div class="peas-item" data-tooltip="External conditions where agent operates">
+                            <div class="peas-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <h3>Environment</h3>
+                            <ul>
+                                <li>Road network</li>
+                                <li>Parking lots</li>
+                                <li>Traffic data</li>
+                                <li>User locations</li>
+                            </ul>
+                        </div>
+                        <div class="peas-item" data-tooltip="Tools the agent uses to affect environment">
+                            <div class="peas-icon">
+                                <i class="fas fa-satellite-dish"></i>
+                            </div>
+                            <h3>Actuators</h3>
+                            <ul>
+                                <li>Route guidance</li>
+                                <li>Notifications</li>
+                                <li>Rerouting</li>
+                                <li>Parking suggestions</li>
+                            </ul>
+                        </div>
+                        <div class="peas-item" data-tooltip="How the agent perceives the environment">
+                            <div class="peas-icon">
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <h3>Sensors</h3>
+                            <ul>
+                                <li>IoT sensors</li>
+                                <li>Traffic APIs</li>
+                                <li>GPS location</li>
+                                <li>User input</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button id="interactive-peas" class="btn btn-small">
+                        <i class="fas fa-play-circle"></i> Interactive PEAS
+                    </button>
+                </div>
+
+                <!-- AI Explanation Panel -->
+                <div class="explanation-card">
+                    <div class="explanation-header">
+                        <h2><i class="fas fa-question-circle"></i> AI Decision Explanation</h2>
+                        <button id="clear-explanation" class="btn-icon" title="Clear explanation">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div id="ai-explanation" class="explanation-container">
+                        <div class="explanation-step">
+                            <h4>Initial State</h4>
+                            <p>System initialized and ready to receive user input.</p>
+                            <div class="fol-code">
+                                <code>State(S0, APP_IDLE)</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center Panel -->
+            <div class="center-panel">
+                <!-- Controls -->
+                <div class="simulation-controls">
+                    <div class="controls-header">
+                        <h2><i class="fas fa-play-circle"></i> AI Simulation</h2>
+                        <div class="simulation-timer">
+                            <i class="fas fa-clock"></i>
+                            <span id="sim-timer">00:00</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="destination">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Destination:</span>
+                                </label>
+                                <select id="destination" class="form-control">
+                                    <option value="utm">UTM University</option>
+                                    <option value="mall">Shopping Mall</option>
+                                    <option value="hospital">City Hospital</option>
+                                    <option value="airport">Airport</option>
+                                    <option value="stadium">Sports Stadium</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Time of Day:</span>
+                                </label>
+                                <select id="time" class="form-control">
+                                    <option value="peak">Peak Hours (8-10 AM)</option>
+                                    <option value="offpeak">Off-Peak (2-4 PM)</option>
+                                    <option value="evening">Evening (5-7 PM)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button id="start-simulation" class="btn btn-primary">
+                                <i class="fas fa-play"></i>
+                                <span>Start AI Simulation</span>
+                            </button>
+                            <button id="pause-simulation" class="btn btn-warning">
+                                <i class="fas fa-pause"></i>
+                                <span>Pause</span>
+                            </button>
+                            <button id="reset-simulation" class="btn btn-secondary">
+                                <i class="fas fa-redo"></i>
+                                <span>Reset</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map -->
+                <div class="map-container">
+                    <div class="map-header">
+                        <h3><i class="fas fa-map"></i> Smart City Map</h3>
+                        <div class="map-legend">
+                            <div class="legend-item">
+                                <div class="legend-color start"></div>
+                                <span>Start Point</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color destination"></div>
+                                <span>Destination</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color route"></div>
+                                <span>Optimal Route</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color alt-route"></div>
+                                <span>Alternative Route</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="city-map" class="city-map">
+                        <div class="map-overlay">
+                            <p><i class="fas fa-mouse-pointer"></i> Click locations to select destination</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- State Space Visualization -->
+                <div class="state-space-container">
+                    <div class="state-space-header">
+                        <h3><i class="fas fa-sitemap"></i> State Space Search</h3>
+                        <div class="state-counter">
+                            <span id="state-count">1/15</span>
+                            <span>States</span>
+                        </div>
+                    </div>
+                    <div id="state-visualization" class="state-visualization">
+                        <svg id="state-graph" width="100%" height="100%"></svg>
+                    </div>
+                </div>
+
+                <!-- Search Algorithm Visualization -->
+                <div class="algorithm-container">
+                    <div class="algorithm-header">
+                        <h3><i class="fas fa-search"></i> Dijkstra's Algorithm</h3>
+                        <div class="algorithm-step">
+                            <span id="algo-step">Step 0</span>
+                        </div>
+                    </div>
+                    <div id="algorithm-visualization" class="algorithm-visualization">
+                        <div class="algorithm-grid" id="algo-grid">
+                            <!-- Algorithm nodes will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Logs -->
+                <div class="logs-card">
+                    <div class="logs-header">
+                        <h2><i class="fas fa-list-alt"></i> AI Decision Log</h2>
+                        <button id="clear-logs" class="btn-icon" title="Clear logs">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div id="ai-logs" class="log-container">
+                        <div class="log-entry system">
+                            <span class="log-time">10:00:00</span>
+                            <span class="log-message">Parkora.ai System Initialized</span>
+                        </div>
+                        <div class="log-entry info">
+                            <span class="log-time">10:00:01</span>
+                            <span class="log-message">AI Agent ready. Select destination and time</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="notifications-card">
+                    <h2><i class="fas fa-bell"></i> Smart Notifications</h2>
+                    <div id="notifications" class="notifications-container">
+                        <div class="notification info">
+                            <div class="notification-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <h4>Welcome to Parkora.ai</h4>
+                                <p>AI Traffic & Parking Advisor is ready</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ML Prediction Visualization -->
+                <div class="ml-card">
+                    <h2><i class="fas fa-brain"></i> ML Prediction Model</h2>
+                    <div class="ml-visualization">
+                        <div class="neural-network">
+                            <div class="neuron-layer input-layer">
+                                <h4>Input Layer</h4>
+                                <div class="neurons">
+                                    <div class="neuron" data-label="Time"></div>
+                                    <div class="neuron" data-label="Day"></div>
+                                    <div class="neuron" data-label="Location"></div>
+                                    <div class="neuron" data-label="Traffic"></div>
+                                </div>
+                            </div>
+                            <div class="neuron-layer hidden-layer">
+                                <h4>Hidden Layer</h4>
+                                <div class="neurons">
+                                    <div class="neuron" data-activation="0.8"></div>
+                                    <div class="neuron" data-activation="0.6"></div>
+                                    <div class="neuron" data-activation="0.4"></div>
+                                </div>
+                            </div>
+                            <div class="neuron-layer output-layer">
+                                <h4>Output</h4>
+                                <div class="prediction-output">
+                                    <div class="probability-bar">
+                                        <div class="probability-fill" id="prediction-fill"></div>
+                                    </div>
+                                    <span id="prediction-value">85%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metrics -->
+                <div class="metrics-card">
+                    <h2><i class="fas fa-chart-bar"></i> Performance Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="metric-icon">
+                                <i class="fas fa-stopwatch"></i>
+                            </div>
+                            <div class="metric-info">
+                                <h4>Time Saved</h4>
+                                <p id="metric-time" class="metric-value">0 min</p>
+                            </div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-icon">
+                                <i class="fas fa-gas-pump"></i>
+                            </div>
+                            <div class="metric-info">
+                                <h4>Fuel Saved</h4>
+                                <p id="metric-fuel" class="metric-value">0 L</p>
+                            </div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-icon">
+                                <i class="fas fa-route"></i>
+                            </div>
+                            <div class="metric-info">
+                                <h4>Efficiency</h4>
+                                <p id="metric-efficiency" class="metric-value">0%</p>
+                            </div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-icon">
+                                <i class="fas fa-parking"></i>
+                            </div>
+                            <div class="metric-info">
+                                <h4>Success Rate</h4>
+                                <p id="metric-success" class="metric-value">0%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comparison-chart">
+                        <h4>Traditional vs AI Performance</h4>
+                        <div class="chart-bars">
+                            <div class="chart-bar traditional">
+                                <span>Traditional</span>
+                                <div class="bar-fill" style="height: 70%"></div>
+                                <span class="bar-value">70%</span>
+                            </div>
+                            <div class="chart-bar ai">
+                                <span>AI-Assisted</span>
+                                <div class="bar-fill" style="height: 95%"></div>
+                                <span class="bar-value">95%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Verification Dashboard -->
+                <div class="verification-card">
+                    <h2><i class="fas fa-check-circle"></i> Concept Verification</h2>
+                    <div class="verification-metrics">
+                        <div class="verification-item">
+                            <div class="verification-label">
+                                <i class="fas fa-clock"></i>
+                                <span>Time Reduction:</span>
+                            </div>
+                            <div class="verification-value">
+                                <span id="time-reduction">30%</span>
+                            </div>
+                        </div>
+                        <div class="verification-item">
+                            <div class="verification-label">
+                                <i class="fas fa-fire"></i>
+                                <span>Fuel Savings:</span>
+                            </div>
+                            <div class="verification-value">
+                                <span id="fuel-savings">25%</span>
+                            </div>
+                        </div>
+                        <div class="verification-item">
+                            <div class="verification-label">
+                                <i class="fas fa-smile"></i>
+                                <span>User Satisfaction:</span>
+                            </div>
+                            <div class="verification-value">
+                                <span id="user-satisfaction">88%</span>
+                            </div>
+                        </div>
+                        <div class="verification-item">
+                            <div class="verification-label">
+                                <i class="fas fa-bullseye"></i>
+                                <span>Success Rate:</span>
+                            </div>
+                            <div class="verification-value">
+                                <span id="overall-success">92%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4><i class="fas fa-users"></i> TriSpark Tech Team</h4>
+                    <div class="team-members">
+                        <p><i class="fas fa-user"></i> Austin See Yong Hui (A23CS5015)</p>
+                        <p><i class="fas fa-user"></i> Wong Jia Xuan (A23CS0197)</p>
+                        <p><i class="fas fa-user"></i> Yap En Thong (A23CS0284)</p>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4><i class="fas fa-brain"></i> AI Concepts</h4>
+                    <div class="concepts-list">
+                        <p><i class="fas fa-check"></i> PEAS Model</p>
+                        <p><i class="fas fa-check"></i> FOL Knowledge Representation</p>
+                        <p><i class="fas fa-check"></i> State Space Search</p>
+                        <p><i class="fas fa-check"></i> Intelligent Agents</p>
+                        <p><i class="fas fa-check"></i> Search Algorithms</p>
+                        <p><i class="fas fa-check"></i> Machine Learning</p>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4><i class="fas fa-book"></i> Course Information</h4>
+                    <div class="course-details">
+                        <p><i class="fas fa-university"></i> SECJ3553 Artificial Intelligence</p>
+                        <p><i class="fas fa-chalkboard-teacher"></i> Section 07 | Dr. Ruhaidah</p>
+                        <p><i class="fas fa-calendar"></i> Semester I 2025/2026</p>
+                        <p><i class="fas fa-map-marker-alt"></i> UTM, Malaysia</p>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p><i class="fas fa-code"></i> Parkora.ai © 2025 - AI Traffic & Parking Advisor POC</p>
+                <div class="theme-info">
+                    <i class="fas fa-palette"></i>
+                    <span>Click moon icon to toggle theme | Select scenarios to test different AI behaviors</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- AI Explanation Modal -->
+    <div id="explanation-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-brain"></i> AI Decision Explanation</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="fol-explanation">
+                    <h3>First Order Logic Reasoning</h3>
+                    <div class="fol-rule">
+                        <h4>KR 1: Parking Availability</h4>
+                        <code>∀p (ParkingLot(p) → (Available(p) ↔ ∃s (Space(s) ∧ In(s, p) ∧ ¬Occupied(s))))</code>
+                        <p>This rule states that a parking lot is available if and only if there exists at least one parking space in that lot that is not occupied.</p>
+                    </div>
+                    <div class="fol-rule">
+                        <h4>KR 2: Optimal Route Selection</h4>
+                        <code>∀r∀p ((Route(r) ∧ Connects(r, UserLocation, p) ∧ Available(p) ∧ LeastCost(r)) → OptimalRoute(r))</code>
+                        <p>If a route connects the user to an available parking lot and has the least cost, then it's the optimal route.</p>
+                    </div>
+                    <div class="fol-rule">
+                        <h4>KR 3: Time-Based Prediction</h4>
+                        <code>∀p∀t ((ParkingLot(p) ∧ HighOccupancy(p, time_past)) → LikelyUnavailable(p, time_now))</code>
+                        <p>If a parking lot has historically been busy at a certain time, it's likely to be unavailable at a similar time now.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data.js"></script>
+    <script src="fol-reasoner.js"></script>
+    <script src="search-algorithm.js"></script>
+    <script src="simulation.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
