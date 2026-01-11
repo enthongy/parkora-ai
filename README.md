@@ -3,6 +3,9 @@
 ## Live Demo for Prototype
 🔗 **[https://enthongy.github.io/parkora-ai/](https://enthongy.github.io/parkora-ai/)**
 
+## Link of Figma Prototype 
+🔗 **[https://www.figma.com/make/VHnbtUyzP42soJNwcY0Uyd/Parking-Suggestion-Prototype?fullscreen=1&t=65v3eaxUjp7mC4Ab-1 ](https://www.figma.com/make/VHnbtUyzP42soJNwcY0Uyd/Parking-Suggestion-Prototype?fullscreen=1&t=65v3eaxUjp7mC4Ab-1 )**
+
 ## 📋 Project Overview
 **Parkora.ai** is an intelligent Traffic & Parking Advisor application designed for smart cities. It combines AI technologies to solve real-world urban mobility challenges by reducing traffic congestion, optimizing parking search, and enhancing driver experience through real-time intelligent decision-making.
 
