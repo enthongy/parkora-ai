@@ -1,4 +1,3 @@
-// Enhanced Simulation for Parkora.ai
 class ParkoraAISimulation {
     constructor() {
         this.isRunning = false;
@@ -174,7 +173,6 @@ class ParkoraAISimulation {
     async continueScenario() {
         if (!this.isRunning || this.isPaused) return;
         
-        // Continue from current state
         switch (this.simulationState.currentState) {
             case 'S2':
                 await this.checkTraffic();
@@ -222,7 +220,6 @@ class ParkoraAISimulation {
     }
 
     async runOptimalScenario() {
-        // Set optimal conditions
         this.simulationState.timeOfDay = 'offpeak';
         document.getElementById('time').value = 'offpeak';
         
@@ -233,7 +230,6 @@ class ParkoraAISimulation {
         await this.checkTraffic();
         
         await this.sleep(1000);
-        // Force parking available
         this.simulationState.parkingFound = true;
         this.transitionToState('S6');
         this.addLog("Parking available (optimal condition)", "success");
@@ -247,7 +243,6 @@ class ParkoraAISimulation {
     }
 
     async runHighTrafficScenario() {
-        // Set high traffic conditions
         this.simulationState.timeOfDay = 'peak';
         document.getElementById('time').value = 'peak';
         
@@ -258,7 +253,6 @@ class ParkoraAISimulation {
         await this.checkTraffic();
         
         await this.sleep(1000);
-        // Force no parking
         this.simulationState.parkingFound = false;
         this.transitionToState('S7');
         this.addLog("No parking available (high traffic condition)", "warning");
@@ -275,7 +269,6 @@ class ParkoraAISimulation {
     }
 
     async runRerouteScenario() {
-        // Start with available parking
         this.simulationState.timeOfDay = 'evening';
         document.getElementById('time').value = 'evening';
         
@@ -292,10 +285,9 @@ class ParkoraAISimulation {
         await this.calculateRoute();
         
         await this.sleep(1000);
-        // Simulate parking becoming unavailable during navigation
         this.startNavigation();
         
-        // After 3 seconds of navigation, trigger reroute
+
         setTimeout(async () => {
             if (this.isRunning) {
                 this.addLog("Parking spot became unavailable!", "warning");
@@ -317,7 +309,6 @@ class ParkoraAISimulation {
     }
 
     async runSevereDelayScenario() {
-        // Set worst-case conditions
         this.simulationState.timeOfDay = 'peak';
         document.getElementById('time').value = 'peak';
         
@@ -340,7 +331,6 @@ class ParkoraAISimulation {
         await this.sleep(1000);
         this.startNavigation();
         
-        // Simulate multiple failures and auto-reroute
         setTimeout(async () => {
             if (this.isRunning) {
                 this.addLog("Severe delay detected!", "warning");
@@ -403,7 +393,6 @@ class ParkoraAISimulation {
         const location = mockData.locations[destination];
         const time = this.simulationState.timeOfDay;
         
-        // Apply FOL reasoning for parking availability
         const folResult = window.folReasoner.explainDecision('parkingAvailability', destination);
         this.addFOLExplanation("Parking Availability", folResult.folRepresentation, folResult.explanation);
         
@@ -442,7 +431,6 @@ class ParkoraAISimulation {
         this.addLog("ML prediction running...", "info");
         this.addNotification("ML", "Predicting parking...", "info");
         
-        // Update ML visualization
         this.updateMLPrediction();
         
         await this.sleep(2000);
@@ -450,7 +438,6 @@ class ParkoraAISimulation {
         const destination = this.simulationState.destination;
         const time = this.simulationState.timeOfDay;
         
-        // Apply FOL reasoning for time-based prediction
         const folResult = window.folReasoner.explainDecision('timeBasedPrediction', 
             destination, time);
         this.addFOLExplanation("Time-Based Prediction", folResult.folRepresentation, folResult.explanation);
@@ -480,8 +467,7 @@ class ParkoraAISimulation {
         
         this.addLog("Calculating optimal route...", "info");
         this.addNotification("Route", "Finding optimal path...", "info");
-        
-        // Start algorithm visualization
+
         if (window.searchVisualizer) {
             window.searchVisualizer.visualizeAStar();
         }
@@ -520,8 +506,7 @@ class ParkoraAISimulation {
         this.simulationState.metrics.successRate = this.simulationState.parkingFound ? 95 : 75;
         this.simulationState.metrics.timeReduction = timeReduction;
         this.simulationState.metrics.userSatisfaction = 85 + (efficiency / 10);
-        
-        // Apply FOL reasoning for optimal route
+
         const folResult = window.folReasoner.explainDecision('optimalRoute', 
             route, this.simulationState.destination);
         this.addFOLExplanation("Optimal Route Selection", folResult.folRepresentation, folResult.explanation);
@@ -546,8 +531,7 @@ class ParkoraAISimulation {
 
     async calculateAlternativeRoute() {
         this.addLog("Calculating alternative route...", "info");
-        
-        // Simulate finding alternative route
+
         const alternativeRoute = {
             ...this.routePath,
             distance: this.routePath.distance * 1.2,
@@ -602,7 +586,6 @@ class ParkoraAISimulation {
             
             this.navigationProgress = (currentStep / totalSteps) * 100;
             
-            // Update progress
             if (currentStep > 0 && currentStep < totalSteps - 1) {
                 if (currentStep % Math.floor(totalSteps / 4) === 0) {
                     const percent = Math.round(this.navigationProgress);
@@ -734,8 +717,7 @@ class ParkoraAISimulation {
         `;
         
         notificationsContainer.appendChild(notifEl);
-        
-        // Keep only last 3 notifications
+
         const children = notificationsContainer.children;
         if (children.length > 3) {
             notificationsContainer.removeChild(children[0]);
@@ -770,21 +752,18 @@ class ParkoraAISimulation {
     }
 
     updateStateVisualization() {
-        // Use D3.js for state graph visualization
         const stateVis = document.getElementById('state-graph');
         if (!stateVis) return;
         
         const width = stateVis.clientWidth;
         const height = stateVis.clientHeight;
-        
-        // Clear previous graph
+
         d3.select(stateVis).selectAll("*").remove();
         
         const svg = d3.select(stateVis)
             .attr("width", width)
             .attr("height", height);
-        
-        // Define states positions in a grid
+
         const states = Object.values(mockData.states);
         const columns = 4;
         const nodeSize = 80;
@@ -799,8 +778,7 @@ class ParkoraAISimulation {
             state.x = x;
             state.y = y;
         });
-        
-        // Draw edges (transitions)
+
         const transitions = [
             { from: 'S0', to: 'S1' },
             { from: 'S1', to: 'S2' },
@@ -838,24 +816,21 @@ class ParkoraAISimulation {
                     .attr("stroke-dasharray", "5,5");
             }
         });
-        
-        // Draw nodes
+
         states.forEach(state => {
             const isActive = this.simulationState.currentState === state.id;
             const isVisited = this.stateHistory.includes(state.id);
             
             const nodeGroup = svg.append("g")
                 .attr("transform", `translate(${state.x}, ${state.y})`);
-            
-            // Node circle
+
             nodeGroup.append("circle")
                 .attr("r", nodeRadius)
                 .attr("fill", isActive ? state.color : 
                               isVisited ? state.color + "40" : "#39486740")
                 .attr("stroke", state.color)
                 .attr("stroke-width", isActive ? 3 : 1);
-            
-            // State ID
+
             nodeGroup.append("text")
                 .attr("text-anchor", "middle")
                 .attr("dy", "-0.5em")
@@ -863,16 +838,14 @@ class ParkoraAISimulation {
                 .style("font-weight", "bold")
                 .style("fill", isActive ? "#ffffff" : state.color)
                 .text(state.id);
-            
-            // State name
+
             nodeGroup.append("text")
                 .attr("text-anchor", "middle")
                 .attr("dy", "1.2em")
                 .style("font-size", "10px")
                 .style("fill", isActive ? "#ffffff" : "#8a9bb2")
                 .text(state.name);
-            
-            // Add hover effect
+
             nodeGroup.style("cursor", "pointer")
                 .on("mouseover", function() {
                     d3.select(this).select("circle")
@@ -890,8 +863,7 @@ class ParkoraAISimulation {
                     this.showStateInfo(state);
                 });
         });
-        
-        // Update state counter
+
         const stateCount = document.getElementById('state-count');
         if (stateCount) {
             stateCount.textContent = `${this.stateHistory.length}/${states.length}`;
@@ -961,13 +933,11 @@ class ParkoraAISimulation {
                 }
             });
         }
-        
-        // Draw main route
+
         if (this.routePath && this.routePath.coordinates) {
             this.drawRouteLine(this.routePath.coordinates, "#4ecdc4", 0);
         }
-        
-        // Draw locations
+
         Object.values(mockData.locations).forEach(location => {
             const isStart = location.id === 'start';
             const isDestination = location.id === this.simulationState.destination;
@@ -1138,8 +1108,7 @@ class ParkoraAISimulation {
         updateMetric('metric-fuel', metrics.fuelSaved.toFixed(2), ' L');
         updateMetric('metric-efficiency', metrics.efficiency, '%');
         updateMetric('metric-success', metrics.successRate, '%');
-        
-        // Update performance score
+
         const performanceScore = Math.round(
             (metrics.efficiency * 0.3 +
              metrics.successRate * 0.3 +
@@ -1165,8 +1134,7 @@ class ParkoraAISimulation {
         updateMetric('fuel-savings', (metrics.fuelSaved * 100 / 10).toFixed(0), '%'); // Convert to percentage
         updateMetric('user-satisfaction', metrics.userSatisfaction.toFixed(0), '%');
         updateMetric('overall-success', metrics.successRate, '%');
-        
-        // Update comparison chart
+
         const traditionalBar = document.querySelector('.chart-bar.traditional .bar-fill');
         const aiBar = document.querySelector('.chart-bar.ai .bar-fill');
         const traditionalValue = document.querySelector('.chart-bar.traditional .bar-value');
@@ -1188,14 +1156,12 @@ class ParkoraAISimulation {
     }
 }
 
-// Initialize global simulation
 let parkoraSimulation;
 
 document.addEventListener('DOMContentLoaded', () => {
     parkoraSimulation = new ParkoraAISimulation();
     window.parkoraSimulation = parkoraSimulation;
-    
-    // Event listeners
+
     const startBtn = document.getElementById('start-simulation');
     const pauseBtn = document.getElementById('pause-simulation');
     const resetBtn = document.getElementById('reset-simulation');
@@ -1290,8 +1256,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.style.display = 'none';
         }
     });
-    
-    // Auto-start demo after 3 seconds
+
     setTimeout(() => {
         if (!parkoraSimulation.isRunning) {
             const scenarioSelect = document.getElementById('scenario-select');
@@ -1306,4 +1271,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 2000);
         }
     }, 3000);
+
 });
