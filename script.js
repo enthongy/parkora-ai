@@ -187,7 +187,6 @@ function initializeMapInteractions() {
 }
 
 function initializeSoundNotifications() {
-    // Create audio context for sound effects
     try {
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
         const audioContext = new AudioContext();
@@ -565,3 +564,4 @@ window.demoAllFeatures = function() {
 
 
 console.log('Parkora.ai Enhanced Prototype Ready with all features');
+
