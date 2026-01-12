@@ -1,4 +1,3 @@
-/* Reset and Variables */
 * {
     margin: 0;
     padding: 0;
@@ -64,7 +63,6 @@ body {
     padding: 0;
 }
 
-/* Header */
 .header {
     background: linear-gradient(90deg, var(--background-medium) 0%, var(--background-dark) 100%);
     padding: 1rem 1.5rem;
@@ -190,7 +188,6 @@ body {
     margin-top: 0.2rem;
 }
 
-/* Main Content */
 .main-content {
     display: grid;
     grid-template-columns: 320px 1fr 340px;
@@ -212,7 +209,6 @@ body {
     }
 }
 
-/* Cards */
 .dashboard-card,
 .peas-card,
 .kr-card,
@@ -256,7 +252,6 @@ body {
     border-color: var(--primary-color);
 }
 
-/* Status Indicator */
 #agent-status {
     display: flex;
     align-items: center;
@@ -291,7 +286,6 @@ body {
     100% { opacity: 1; }
 }
 
-/* Metrics */
 .metrics {
     display: flex;
     flex-direction: column;
@@ -330,7 +324,6 @@ body {
     transition: all 0.3s ease;
 }
 
-/* PEAS Grid */
 .peas-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -403,7 +396,6 @@ body {
     margin-top: 0.5rem;
 }
 
-/* Explanation Panel */
 .explanation-header {
     display: flex;
     justify-content: space-between;
@@ -462,7 +454,6 @@ body {
     color: var(--success-color);
 }
 
-/* Controls */
 .controls-header {
     display: flex;
     justify-content: space-between;
@@ -611,7 +602,6 @@ body {
     color: var(--primary-color);
 }
 
-/* Map */
 .map-header {
     display: flex;
     justify-content: space-between;
@@ -687,7 +677,6 @@ body {
     margin-right: 0.3rem;
 }
 
-/* State Space */
 .state-space-header {
     display: flex;
     justify-content: space-between;
@@ -735,7 +724,6 @@ body {
     position: relative;
 }
 
-/* Algorithm Visualization */
 .algorithm-container {
     margin-top: 1rem;
 }
@@ -895,7 +883,6 @@ body {
     flex: 1;
 }
 
-/* Notifications */
 .notifications-container {
     display: flex;
     flex-direction: column;
@@ -972,7 +959,6 @@ body {
     opacity: 0.9;
 }
 
-/* ML Visualization */
 .ml-visualization {
     padding: 1rem;
     background: var(--background-light);
@@ -1028,7 +1014,6 @@ body {
     justify-content: center;
 }
 
-/* Input layer neuron labels */
 .input-layer .neuron::before {
     content: attr(data-label);
     position: absolute;
@@ -1042,7 +1027,6 @@ body {
     z-index: 2;
 }
 
-/* Hidden layer neuron activation values */
 .hidden-layer .neuron::after {
     content: attr(data-activation);
     position: absolute;
@@ -1056,7 +1040,6 @@ body {
     z-index: 2;
 }
 
-/* Output layer probability label */
 .output-layer .prediction-output::before {
     content: "Parking Probability";
     position: absolute;
@@ -1088,7 +1071,6 @@ body {
     box-shadow: 0 0 4px rgba(0, 184, 148, 0.3);
 }
 
-/* Add connection lines */
 .neural-network::before {
     content: '';
     position: absolute;
@@ -1216,7 +1198,6 @@ body {
     content: "Traffic conditions (e.g., Heavy)";
 }
 
-/* Animation for neural network */
 @keyframes neuronPulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.1); }
@@ -1226,7 +1207,6 @@ body {
     animation: neuronPulse 1s infinite;
 }
 
-/* Responsive adjustments for ML visualization */
 @media (max-width: 768px) {
     .ml-visualization {
         height: auto;
@@ -1284,7 +1264,6 @@ body {
     }
 }
 
-/* Dark theme specific adjustments */
 [data-theme="dark"] .neuron {
     border-color: rgba(255, 255, 255, 0.2);
 }
@@ -1305,7 +1284,6 @@ body {
         radial-gradient(circle at 75% 50%, rgba(0, 173, 181, 0.3) 1px, transparent 1px);
 }
 
-/* Light theme specific adjustments */
 [data-theme="light"] .neuron {
     border-color: rgba(0, 0, 0, 0.1);
 }
@@ -1325,7 +1303,7 @@ body {
         radial-gradient(circle at 50% 80%, rgba(0, 139, 139, 0.2) 1px, transparent 1px),
         radial-gradient(circle at 75% 50%, rgba(0, 131, 143, 0.2) 1px, transparent 1px);
 }
-/* Metrics Grid */
+
 .metrics-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1378,7 +1356,6 @@ body {
     font-weight: bold;
 }
 
-/* Comparison Chart */
 .comparison-chart {
     margin-top: 1rem;
     padding: 0.8rem;
@@ -1433,7 +1410,6 @@ body {
     color: var(--text-primary);
 }
 
-/* Verification Dashboard */
 .verification-metrics {
     display: flex;
     flex-direction: column;
@@ -1471,7 +1447,6 @@ body {
     font-size: 1rem;
 }
 
-/* Modal */
 .modal {
     display: none;
     position: fixed;
@@ -1569,7 +1544,6 @@ body {
     line-height: 1.5;
 }
 
-/* Footer */
 .footer {
     background: var(--background-medium);
     padding: 1.5rem;
@@ -1638,7 +1612,6 @@ body {
     color: var(--warning-color);
 }
 
-/* Dynamic Elements */
 .state-node {
     position: absolute;
     width: 90px;
@@ -1755,7 +1728,6 @@ body {
     transition: all 0.5s ease;
 }
 
-/* Tooltip */
 .tooltip {
     position: fixed;
     background: rgba(0, 0, 0, 0.9);
@@ -1777,7 +1749,6 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -1797,7 +1768,6 @@ body {
     background: var(--primary-dark);
 }
 
-/* Animation for updated values */
 @keyframes highlight {
     0% { color: var(--success-color); transform: scale(1); }
     50% { color: var(--text-secondary); transform: scale(1.1); }
@@ -1808,7 +1778,6 @@ body {
     animation: highlight 0.6s ease;
 }
 
-/* Route animation */
 @keyframes dash {
     to {
         stroke-dashoffset: -1000;
@@ -1819,7 +1788,6 @@ body {
     animation: dash 20s linear infinite;
 }
 
-/* Car animation */
 @keyframes carBounce {
     0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
     25% { transform: translate(-50%, -50%) rotate(3deg); }
@@ -1830,14 +1798,12 @@ body {
     animation: carBounce 2s infinite ease-in-out;
 }
 
-/* Map location icons */
 .map-location i {
     font-size: 1.5rem;
     color: white;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .header {
         flex-direction: column;
@@ -1879,7 +1845,6 @@ body {
     }
 }
 
-/* Print styles */
 @media print {
     .theme-toggle,
     .btn,
@@ -1892,4 +1857,5 @@ body {
     .main-content {
         grid-template-columns: 1fr !important;
     }
+
 }
