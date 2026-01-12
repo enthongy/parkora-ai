@@ -1,4 +1,3 @@
-// Search Algorithm Visualization for Parkora.ai
 class SearchAlgorithmVisualizer {
     constructor() {
         this.graph = this.createDemoGraph();
@@ -12,11 +11,9 @@ class SearchAlgorithmVisualizer {
     }
 
     createDemoGraph() {
-        // Create a grid-based graph for visualization
         const nodes = {};
         const gridSize = 4;
-        
-        // Create grid nodes
+
         for (let row = 0; row < gridSize; row++) {
             for (let col = 0; col < gridSize; col++) {
                 const id = `N${row}${col}`;
@@ -32,7 +29,6 @@ class SearchAlgorithmVisualizer {
             }
         }
         
-        // Add neighbors (4-connected grid)
         for (let row = 0; row < gridSize; row++) {
             for (let col = 0; col < gridSize; col++) {
                 const node = nodes[`N${row}${col}`];
@@ -42,15 +38,13 @@ class SearchAlgorithmVisualizer {
                 if (row < gridSize - 1) node.neighbors.push({ id: `N${row+1}${col}`, cost: 1 + Math.random() });
                 if (col > 0) node.neighbors.push({ id: `N${row}${col-1}`, cost: 1 + Math.random() });
                 if (col < gridSize - 1) node.neighbors.push({ id: `N${row}${col+1}`, cost: 1 + Math.random() });
-                
-                // Calculate heuristic (Manhattan distance to goal)
+
                 const goalRow = 3;
                 const goalCol = 3;
                 node.heuristic = Math.abs(row - goalRow) + Math.abs(col - goalCol);
             }
         }
-        
-        // Set start and goal
+
         nodes["N00"].isStart = true;
         nodes["N33"].isGoal = true;
         nodes["N00"].cost = 0;
@@ -65,8 +59,7 @@ class SearchAlgorithmVisualizer {
         this.currentNode = null;
         this.stepCounter = 0;
         this.isRunning = false;
-        
-        // Initialize open set with start node
+
         this.openSet.push({ id: "N00", fScore: this.graph["N00"].heuristic });
         this.currentNode = "N00";
     }
@@ -77,26 +70,21 @@ class SearchAlgorithmVisualizer {
         
         while (this.isRunning && this.openSet.length > 0) {
             this.stepCounter++;
-            
-            // Get node with lowest cost
+
             this.openSet.sort((a, b) => a.fScore - b.fScore);
             const current = this.openSet.shift();
             this.currentNode = current.id;
-            
-            // Add to closed set
+
             this.closedSet.add(current.id);
-            
-            // Update visualization
+
             this.updateAlgorithmDisplay();
-            
-            // Check if we reached the goal
+
             if (current.id === this.goalNode) {
                 this.showPath();
                 this.isRunning = false;
                 return this.reconstructPath();
             }
-            
-            // Explore neighbors
+        
             const neighbors = this.graph[current.id].neighbors;
             for (const neighbor of neighbors) {
                 if (this.closedSet.has(neighbor.id)) continue;
@@ -119,8 +107,7 @@ class SearchAlgorithmVisualizer {
                     existingNode.fScore = tentativeCost;
                 }
             }
-            
-            // Wait for animation
+
             await this.sleep(this.animationSpeed);
         }
         
@@ -133,26 +120,20 @@ class SearchAlgorithmVisualizer {
         
         while (this.isRunning && this.openSet.length > 0) {
             this.stepCounter++;
-            
-            // Get node with lowest f-score (g + h)
+
             this.openSet.sort((a, b) => a.fScore - b.fScore);
             const current = this.openSet.shift();
             this.currentNode = current.id;
-            
-            // Add to closed set
+
             this.closedSet.add(current.id);
-            
-            // Update visualization
+
             this.updateAlgorithmDisplay();
-            
-            // Check if we reached the goal
+
             if (current.id === this.goalNode) {
                 this.showPath();
                 this.isRunning = false;
                 return this.reconstructPath();
             }
-            
-            // Explore neighbors
             const neighbors = this.graph[current.id].neighbors;
             for (const neighbor of neighbors) {
                 if (this.closedSet.has(neighbor.id)) continue;
@@ -176,11 +157,11 @@ class SearchAlgorithmVisualizer {
                 }
             }
             
-            // Wait for animation
+
             await this.sleep(this.animationSpeed);
         }
         
-        return null; // No path found
+        return null; 
     }
 
     reconstructPath() {
@@ -222,16 +203,14 @@ class SearchAlgorithmVisualizer {
                 nodeElement.id = `node-${nodeId}`;
                 nodeElement.style.gridColumn = col + 1;
                 nodeElement.style.gridRow = row + 1;
-                
-                // Set classes based on node state
+
                 if (node.isStart) nodeElement.classList.add('start');
                 if (node.isGoal) nodeElement.classList.add('goal');
                 if (this.closedSet.has(nodeId)) nodeElement.classList.add('visited');
                 if (this.openSet.find(n => n.id === nodeId)) nodeElement.classList.add('frontier');
                 if (node.onPath) nodeElement.classList.add('path');
                 if (nodeId === this.currentNode) nodeElement.classList.add('current');
-                
-                // Node content
+
                 const nodeIdSpan = document.createElement('div');
                 nodeIdSpan.className = 'node-id';
                 nodeIdSpan.textContent = nodeId;
@@ -251,8 +230,7 @@ class SearchAlgorithmVisualizer {
                 algoGrid.appendChild(nodeElement);
             }
         }
-        
-        // Update step counter
+
         const stepElement = document.getElementById('algo-step');
         if (stepElement) {
             stepElement.textContent = `Step ${this.stepCounter}`;
@@ -318,6 +296,6 @@ class SearchAlgorithmVisualizer {
     }
 }
 
-// Initialize global search visualizer
 window.SearchAlgorithmVisualizer = SearchAlgorithmVisualizer;
+
 window.searchVisualizer = new SearchAlgorithmVisualizer();
