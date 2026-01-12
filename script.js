@@ -1,60 +1,48 @@
-// Enhanced Main Script for Parkora.ai
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Parkora.ai Enhanced Prototype Loaded');
-    
-    // Initialize all components
+
     initializeThemeToggle();
     initializeTooltips();
     initializeMapInteractions();
     initializeSoundNotifications();
     initializeResponsiveDesign();
-    
-    // Show welcome message
+
     setTimeout(() => {
         if (window.parkoraSimulation) {
             window.parkoraSimulation.addLog("Enhanced AI System Ready", "system");
             window.parkoraSimulation.addLog("Select scenario from dropdown to test different AI behaviors", "info");
             window.parkoraSimulation.addNotification("Welcome", "Parkora.ai Enhanced Prototype v2.0", "info");
-            
-            // Show feature highlights
+
             highlightNewFeatures();
         }
     }, 1000);
 });
 
-// Enhanced Theme Toggle with Animation
 function initializeThemeToggle() {
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = themeToggle.querySelector('i');
     const themeText = themeToggle.querySelector('span');
-    
-    // Check for saved theme preference
+
     const savedTheme = localStorage.getItem('parkora-theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
     updateThemeUI(savedTheme);
-    
-    // Toggle theme on click
+
     themeToggle.addEventListener('click', function() {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        // Add transition animation
+
         document.documentElement.style.transition = 'all 0.5s ease';
-        
-        // Apply new theme
+
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('parkora-theme', newTheme);
-        
-        // Update UI with animation
+
         updateThemeUI(newTheme);
-        
-        // Log theme change
+
         if (window.parkoraSimulation) {
             window.parkoraSimulation.addLog(`Theme changed to ${newTheme} mode`, "system");
             window.parkoraSimulation.addNotification("Theme Changed", `Switched to ${newTheme} mode`, "info");
         }
-        
-        // Remove transition after animation
+
         setTimeout(() => {
             document.documentElement.style.transition = '';
         }, 500);
@@ -75,7 +63,6 @@ function initializeThemeToggle() {
     }
 }
 
-// Enhanced Tooltip System with Animations
 function initializeTooltips() {
     const tooltipContainer = document.createElement('div');
     tooltipContainer.id = 'tooltip-container';
@@ -88,8 +75,7 @@ function initializeTooltips() {
         transform: translateY(10px);
     `;
     document.body.appendChild(tooltipContainer);
-    
-    // Add tooltips to elements with data-tooltip attribute
+
     document.addEventListener('mouseover', function(e) {
         const target = e.target.closest('[data-tooltip]');
         if (!target) return;
@@ -149,12 +135,10 @@ function initializeTooltips() {
     }
 }
 
-// Enhanced Map Interactions
 function initializeMapInteractions() {
     const map = document.getElementById('city-map');
     if (!map) return;
-    
-    // Add enhanced hover effects
+
     map.addEventListener('mouseover', function(e) {
         const location = e.target.closest('.map-location');
         if (location && !location.classList.contains('start')) {
@@ -177,8 +161,7 @@ function initializeMapInteractions() {
             location.removeAttribute('data-tooltip');
         }
     });
-    
-    // Enhanced click handler for clear logs button
+
     const clearLogsBtn = document.getElementById('clear-logs');
     if (clearLogsBtn) {
         clearLogsBtn.addEventListener('click', function() {
@@ -203,7 +186,6 @@ function initializeMapInteractions() {
     }
 }
 
-// Sound Notifications
 function initializeSoundNotifications() {
     // Create audio context for sound effects
     try {
@@ -268,7 +250,6 @@ function initializeSoundNotifications() {
     }
 }
 
-// Responsive Design Adjustments
 function initializeResponsiveDesign() {
     function adjustLayout() {
         const width = window.innerWidth;
@@ -286,15 +267,12 @@ function initializeResponsiveDesign() {
             }
         }
     }
-    
-    // Initial adjustment
+
     adjustLayout();
-    
-    // Adjust on resize
+
     window.addEventListener('resize', adjustLayout);
 }
 
-// Highlight New Features
 function highlightNewFeatures() {
     const newFeatures = [
         {
@@ -325,15 +303,12 @@ function highlightNewFeatures() {
             if (element) {
                 const originalBoxShadow = element.style.boxShadow;
                 const originalBorder = element.style.borderColor;
-                
-                // Pulse animation
+
                 element.style.boxShadow = `0 0 20px ${feature.color}`;
                 element.style.borderColor = feature.color;
-                
-                // Show tooltip
+
                 element.setAttribute('data-tooltip', feature.message);
-                
-                // Reset after 3 seconds
+
                 setTimeout(() => {
                     element.style.boxShadow = originalBoxShadow;
                     element.style.borderColor = originalBorder;
@@ -344,10 +319,8 @@ function highlightNewFeatures() {
     });
 }
 
-// Enhanced CSS for new features
 const enhancedStyles = document.createElement('style');
 enhancedStyles.textContent = `
-    /* Enhanced animations */
     @keyframes float {
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-10px); }
@@ -358,7 +331,6 @@ enhancedStyles.textContent = `
         100% { background-position: 200px 0; }
     }
     
-    /* Enhanced tooltip */
     .tooltip-arrow {
         position: absolute;
         top: -6px;
@@ -370,8 +342,7 @@ enhancedStyles.textContent = `
         border-right: 6px solid transparent;
         border-bottom: 6px solid rgba(0, 0, 0, 0.9);
     }
-    
-    /* Scenario selector styles */
+
     .scenario-dropdown option {
         padding: 10px;
         background: var(--card-bg);
@@ -392,8 +363,7 @@ enhancedStyles.textContent = `
     .scenario-dropdown option[value="severe-delay"] {
         color: var(--error-color);
     }
-    
-    /* Mobile layout adjustments */
+
     .mobile-layout .header-controls {
         flex-wrap: wrap;
         justify-content: center;
@@ -414,8 +384,7 @@ enhancedStyles.textContent = `
         max-height: 400px;
         overflow-y: auto;
     }
-    
-    /* Print optimization */
+
     @media print {
         .modal,
         .tooltip,
@@ -431,8 +400,7 @@ enhancedStyles.textContent = `
             max-height: 100px;
         }
     }
-    
-    /* Accessibility improvements */
+
     @media (prefers-reduced-motion: reduce) {
         * {
             animation-duration: 0.01ms !important;
@@ -440,8 +408,7 @@ enhancedStyles.textContent = `
             transition-duration: 0.01ms !important;
         }
     }
-    
-    /* High contrast mode */
+
     @media (prefers-contrast: high) {
         :root {
             --primary-color: #0000ff;
@@ -455,8 +422,7 @@ enhancedStyles.textContent = `
             --text-secondary: #0000ff;
         }
     }
-    
-    /* Dark mode optimizations */
+
     [data-theme="dark"] .map-location {
         filter: brightness(1.2);
     }
@@ -465,7 +431,6 @@ enhancedStyles.textContent = `
         background: rgba(255, 255, 255, 0.05);
     }
     
-    /* Light mode optimizations */
     [data-theme="light"] .map-location {
         filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     }
@@ -473,8 +438,7 @@ enhancedStyles.textContent = `
     [data-theme="light"] .fol-code {
         background: rgba(0, 0, 0, 0.05);
     }
-    
-    /* Algorithm visualization enhancements */
+
     .algo-node {
         position: relative;
         transition: all 0.3s ease;
@@ -557,7 +521,6 @@ enhancedStyles.textContent = `
 `;
 document.head.appendChild(enhancedStyles);
 
-// Make enhanced functions available globally
 window.initializeEnhancedSimulation = function() {
     if (window.parkoraSimulation) {
         window.parkoraSimulation.initialize();
@@ -570,7 +533,6 @@ window.initializeEnhancedSimulation = function() {
 };
 
 window.demoAllFeatures = function() {
-    // Cycle through all scenarios
     const scenarios = ['optimal', 'high-traffic', 'reroute', 'severe-delay'];
     let currentIndex = 0;
     
@@ -600,5 +562,6 @@ window.demoAllFeatures = function() {
     
     runNextScenario();
 };
+
 
 console.log('Parkora.ai Enhanced Prototype Ready with all features');
