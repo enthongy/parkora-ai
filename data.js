@@ -1,4 +1,3 @@
-// Enhanced Data for Parkora.ai simulation
 const mockData = {
     locations: {
         start: { 
@@ -86,7 +85,6 @@ const mockData = {
         }
     },
 
-    // Enhanced route network with multiple paths
     routeNetwork: {
         nodes: {
             A: { x: 15, y: 15, name: "Start" },
@@ -143,7 +141,6 @@ const mockData = {
         }
     },
 
-    // Enhanced parking patterns with temporal knowledge
     parkingPatterns: {
         utm: { 
             peak: 0.2, 
@@ -200,7 +197,6 @@ const mockData = {
         S14: { id: "S14", name: "SESSION_END", color: "#607d8b", description: "Journey completed" }
     },
 
-    // Scenarios from your state space document
     scenarios: {
         optimal: {
             name: "Optimal Path",
@@ -233,7 +229,6 @@ const mockData = {
     }
 };
 
-// Enhanced Knowledge Base for FOL reasoning
 const knowledgeBase = {
     parkingLots: {
         utm: { available: true, occupiedSpaces: 450, totalSpaces: 500 },
@@ -242,8 +237,7 @@ const knowledgeBase = {
         airport: { available: true, occupiedSpaces: 1800, totalSpaces: 2000 },
         stadium: { available: false, occupiedSpaces: 750, totalSpaces: 800 }
     },
-    
-    // First Order Logic predicates
+
     predicates: {
         ParkingLot: ['utm', 'mall', 'hospital', 'airport', 'stadium'],
         Available: function(lot) {
@@ -264,7 +258,6 @@ const knowledgeBase = {
     }
 };
 
-// Enhanced route finding with Dijkstra algorithm
 function findOptimalRoute(startId, destinationId, trafficCondition) {
     const graph = createGraphFromNetwork();
     const startNode = "A"; // Always start from node A
@@ -276,16 +269,14 @@ function findOptimalRoute(startId, destinationId, trafficCondition) {
     const previous = {};
     const visited = new Set();
     const pq = new PriorityQueue();
-    
-    // Initialize distances
+
     for (const node in graph) {
         distances[node] = Infinity;
         previous[node] = null;
     }
     distances[startNode] = 0;
     pq.enqueue(startNode, 0);
-    
-    // Dijkstra's algorithm
+
     while (!pq.isEmpty()) {
         const currentNode = pq.dequeue().element;
         
@@ -306,16 +297,14 @@ function findOptimalRoute(startId, destinationId, trafficCondition) {
             }
         }
     }
-    
-    // Reconstruct path
+
     const path = [];
     let currentNode = destNode;
     while (currentNode !== null) {
         path.unshift(currentNode);
         currentNode = previous[currentNode];
     }
-    
-    // Convert node path to coordinates
+
     const coordinates = path.map(nodeId => {
         const node = mockData.routeNetwork.nodes[nodeId];
         return [node.x, node.y];
@@ -338,13 +327,11 @@ function findOptimalRoute(startId, destinationId, trafficCondition) {
 
 function createGraphFromNetwork() {
     const graph = {};
-    
-    // Initialize nodes
+
     for (const nodeId in mockData.routeNetwork.nodes) {
         graph[nodeId] = {};
     }
-    
-    // Add edges
+
     mockData.routeNetwork.edges.forEach(edge => {
         const congestion = edge.congestion || 0;
         const baseCost = edge.distance * (1 + congestion);
@@ -367,7 +354,6 @@ function getNodeForLocation(locationId) {
     return mapping[locationId];
 }
 
-// Priority Queue for Dijkstra
 class PriorityQueue {
     constructor() {
         this.items = [];
@@ -424,7 +410,6 @@ function calculateFuelSaved(timeSaved) {
     return timeSaved * 0.08;
 }
 
-// FOL Reasoning Functions
 function applyFOLRule1(parkingLot) {
     // KR1: Parking Availability Representation
     const lot = knowledgeBase.parkingLots[parkingLot];
@@ -444,15 +429,13 @@ function applyFOLRule2(route, parkingLot) {
     // ∀r∀p ((Route(r) ∧ Connects(r, UserLocation, p) ∧ Available(p) ∧ LeastCost(r)) → OptimalRoute(r))
     const isAvailable = applyFOLRule1(parkingLot);
     if (!isAvailable) return false;
-    
-    // Check if route connects to parking lot
+
     const connects = route && route.to === parkingLot;
     const hasLeastCost = route && route.trafficTime < (route.normalTime * 1.5); // Simple cost check
     
     return connects && hasLeastCost;
 }
 
-// Export functions for global use
 window.mockData = mockData;
 window.knowledgeBase = knowledgeBase;
 window.findOptimalRoute = findOptimalRoute;
@@ -461,4 +444,5 @@ window.applyFOLRule2 = applyFOLRule2;
 window.calculateTravelTime = calculateTravelTime;
 window.checkParkingAvailability = checkParkingAvailability;
 window.calculateEfficiency = calculateEfficiency;
+
 window.calculateFuelSaved = calculateFuelSaved;
