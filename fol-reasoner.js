@@ -1,4 +1,3 @@
-// FOL Reasoner for Parkora.ai
 class FOLReasoner {
     constructor() {
         this.knowledgeBase = window.knowledgeBase;
@@ -215,14 +214,12 @@ class FOLReasoner {
         this.explanationLog = [];
     }
 
-    // Interactive FOL demonstration
     demonstrateFOLRule(ruleId, exampleData) {
         const rule = this.inferenceRules[ruleId];
         if (!rule) return null;
 
         const demoSteps = [];
 
-        // Step 1: Show the FOL rule
         demoSteps.push({
             step: 1,
             title: "First Order Logic Rule",
@@ -230,7 +227,6 @@ class FOLReasoner {
             type: "fol"
         });
 
-        // Step 2: Show instantiation
         const instantiated = this.instantiateFOL(rule.fol, exampleData);
         demoSteps.push({
             step: 2,
@@ -239,7 +235,6 @@ class FOLReasoner {
             type: "instantiation"
         });
 
-        // Step 3: Apply the rule
         const result = rule.apply(...Object.values(exampleData));
         demoSteps.push({
             step: 3,
@@ -248,7 +243,6 @@ class FOLReasoner {
             type: "application"
         });
 
-        // Step 4: Show result
         demoSteps.push({
             step: 4,
             title: "Inference Result",
@@ -271,6 +265,6 @@ class FOLReasoner {
     }
 }
 
-// Initialize global FOL reasoner
 window.FOLReasoner = FOLReasoner;
+
 window.folReasoner = new FOLReasoner();
